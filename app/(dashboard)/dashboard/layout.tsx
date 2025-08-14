@@ -28,7 +28,6 @@ export default function DashboardLayout({
                 <div className="rounded border p-4">{analytics}</div>
             </section>
 
-            {/* необязательная центральная область */}
             <section className="md:col-span-2">{children}</section>
         </main>
     );
