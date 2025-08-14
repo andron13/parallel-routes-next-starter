@@ -1,7 +1,19 @@
 {
   "name": "paralel-routing-next",
+  "description": "A tiny Next.js App Router** demo that showcases Parallel Routes",
+
   "version": "0.1.0",
   "private": true,
+  "license": "UNLICENSED",
+  "repository": {
+    "type": "git",
+    "url": "git+git@github.com:andron13/parallel-routes-next-starter.git"
+  },
+  "author": {
+    "name": "andron13",
+    "email": "andron13@gmail.com",
+    "url": "https://github.com/andron13"
+  },
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",

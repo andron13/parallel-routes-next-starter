@@ -1,36 +1,54 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# parallel-routes-next-starter
 
-## Getting Started
+A tiny **Next.js App Router** demo that showcases **Parallel Routes** (a.k.a. slots). It renders two independent areas in the same layout and demonstrates:
 
-First, run the development server:
+- `@team` and `@analytics` slots
+- `default.tsx` fallbacks for hard refresh / direct visits
+- `@slot/[...catchAll]/page.tsx` to clear the *other* slot on navigation
 
+## Tech Stack
+- Next.js (App Router)
+- React + TypeScript
+- No backend, no extra UI libraries required
+
+## Why
+Parallel routes let you compose split views, tabs, and modal-overlays without reloading the whole page. Each slot updates independently while sharing a parent layout.
+
+## Quick Start
 ```bash
+npm i
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# open http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Routes to try
+- `/dashboard` – both slots show their `default.tsx`
+- `/dashboard/members` – fills **Team** slot; **Analytics** is cleared
+- `/dashboard/visitors` – fills **Analytics** slot; **Team** is cleared
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Project Structure (core parts)
+```
+app/
+  layout.tsx
+  page.tsx
+  (dashboard)/
+    dashboard/
+      layout.tsx
+      page.tsx
+      @team/
+        default.tsx
+        members/page.tsx
+        [...catchAll]/page.tsx
+      @analytics/
+        default.tsx
+        visitors/page.tsx
+        [...catchAll]/page.tsx
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Concepts (1‑liners)
+- **Parallel Route / Slot**: a folder named `@slotName`; rendered via a prop with the same name in the parent layout.
+- **`default.tsx`**: what to show when a slot doesn’t match the current URL (e.g., refresh/direct link).
+- **`[...catchAll]`** in a slot: matches “foreign” segments and returns `null` to reset/clear that slot.
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## License
+MIT
