@@ -1,18 +1,16 @@
-# parallel-routes-next-starter — 3 root layouts (Route Groups)
+# parallel-routes-next-starter
 
-This branch demonstrates three independent **root layouts** using **Route Groups** in the Next.js App Router. Each top‑level group provides its own `<html>/<body>` shell and does **not** inherit from the others, while URLs remain clean.
+Two small **Next.js App Router** demos in one repo:
 
-## What it shows
-
-- Three top-level route groups: `(home)`, `(section)`, `(article)`
-- Separate `layout.tsx` per area (no shared `app/layout.tsx`)
-- Group names in parentheses **do not** appear in the URL
+- **Demo A — Parallel Routes (slots):** dashboard with two independent areas using `@team` and `@analytics`, `default.tsx` fallbacks, and a `[...]catchAll` reset.
+- **Demo B — Multiple Root Layouts (Route Groups):** three independent root layouts using `(home)`, `(section)`, `(article)` (clean URLs, no shared `app/layout.tsx`).
 
 ## Tech Stack
 
 - Next.js (App Router)
 - React + TypeScript
-- No backend required
+- Tailwind CSS (utility classes)
+- Dev tooling: ESLint, Prettier, Husky, lint-staged
 
 ## Quick Start
 
@@ -22,16 +20,61 @@ npm run dev
 # open http://localhost:3000
 ```
 
-## Routes to try
+---
 
-- `/` — **Home** (Layout A)
-- `/section` — **Section** (Layout B) _(or `/раздел` if you prefer Cyrillic slug)_
-- `/section/article` — **Article** (Layout C) _(or `/раздел/статья`)_
+## Demo A — Parallel Routes (slots)
 
-## Directory structure (core parts)
+**Why:** Compose split views/tabs where each area updates independently without rerendering the entire page.
+
+**Routes to try**
+
+- `/dashboard` – both slots render their `default.tsx`
+- `/dashboard/members` – fills **Team** slot; **Analytics** is cleared via catch‑all
+- `/dashboard/visitors` – fills **Analytics** slot; **Team** is cleared via catch‑all
+
+**Core structure**
 
 ```
 app/
+  (dashboard)/
+    dashboard/
+      layout.tsx
+      page.tsx
+      @team/
+        default.tsx
+        members/page.tsx
+        [...catchAll]/page.tsx
+      @analytics/
+        default.tsx
+        visitors/page.tsx
+        [...catchAll]/page.tsx
+```
+
+**Concepts**
+
+- **Parallel Route / Slot:** folder named `@slotName`; rendered as a prop in the parent layout.
+- **`default.tsx`:** fallback for hard refresh/direct visits when a slot doesn’t match the URL.
+- **`[...catchAll]` in a slot:** matches “foreign” segments and returns `null` to reset/clear that slot.
+
+---
+
+## Demo B — Multiple Root Layouts (Route Groups)
+
+**Why:** Provide completely different shells (`<html>/<body>`, providers, theme) for unrelated parts of the site while keeping URLs clean.
+
+**Routes to try**
+
+- `/` — **Home** (root layout A)
+- `/section` — **Section** (root layout B)
+- `/section/article` — **Article** (root layout C)
+
+**Core structure**
+
+```
+app/
+  layout.tsx              # Global root layout (shared). Optional.
+                          # If you remove it, move global imports (e.g. ./globals.css)
+                          # into each group's root layout.
   (home)/
     layout.tsx            # Root layout A for /
     page.tsx              # /
@@ -48,16 +91,19 @@ app/
         page.tsx          # /section/article
 ```
 
-## Notes
+**Notes**
 
-- Do **not** create `app/layout.tsx` in the root — it would wrap everything and defeat the purpose of separate roots.
-- Define each concrete route in **one** group only (e.g., `/section` exists only under `(section)`).
-- You can still use Parallel Routes, Intercepting Routes, etc., **inside** any of these groups.
+- Do **not** create a shared `app/layout.tsx` if you want independent roots; each route group supplies its own root layout.
+- Define each concrete route in **one** group only to avoid conflicts.
+- You can still use Parallel Routes, Intercepting Routes, etc., _inside_ any of these groups.
+
+---
 
 ## More resources
 
-- Next.js Route Groups — https://nextjs.org/docs/app/building-your-application/routing/route-groups
-- Next.js Layouts — https://nextjs.org/docs/app/building-your-application/routing/pages-and-layouts
+- Next.js Parallel Routes: [https://nextjs.org/docs/app/api-reference/file-conventions/parallel-routes](https://nextjs.org/docs/app/api-reference/file-conventions/parallel-routes)
+- Route Groups: [https://nextjs.org/docs/app/building-your-application/routing/route-groups](https://nextjs.org/docs/app/building-your-application/routing/route-groups)
+- Layouts: [https://nextjs.org/docs/app/building-your-application/routing/pages-and-layouts](https://nextjs.org/docs/app/building-your-application/routing/pages-and-layouts)
 
 ## License
 
